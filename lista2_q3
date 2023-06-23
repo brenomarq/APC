@@ -1,0 +1,32 @@
+# Listas 2 - Questão 3
+# Dimensões da matriz
+n, m = map(int, input().split())
+# Quantidade de projéteis
+qtd = int(input())
+# Posições do arremesso
+posicoes = [[int(x) for x in input().split()] for _ in range(0,qtd)]
+# Matriz de zeros
+general = [[0]*m for _ in range(n)]
+
+# Cava a profundidade
+for posicao in posicoes:
+    for i in range(0,n):
+        for j in range(0,m):
+            if (i+1) == posicao[0] or (j+1) == posicao[1]:
+                general[i][j] += 1
+
+# Encontra a maior profundidade
+maior = 0
+for lista in general:
+    aux = max(lista)
+    if aux > maior:
+        maior = aux
+
+# Encontra o número de buracos
+num = 0
+for i in range(0,n):
+    for j in range(0,m):
+        if general[i][j] == maior:
+            num += 1
+
+print(num)
