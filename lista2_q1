@@ -1,0 +1,23 @@
+def solucao(matriz):
+    k = 0
+    l = dim-1
+    for i in range(0, dim):
+        for j in range(0,dim):
+            if i == j and matriz[i][j] != "X":
+                return False
+            if i == k and j == l and matriz[i][j] != "X":
+                return False
+        k += 1
+        l -= 1
+    return True
+
+
+dim = int(input())
+
+# Cria a matriz
+matriz = [[x for x in input().split()] for _ in range(0,dim)]
+
+if solucao(matriz):
+    print("O one piece eh real!")
+else:
+    print("Talvez o tesouro seja os amigos que fizemos no caminho")
