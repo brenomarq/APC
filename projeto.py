@@ -143,7 +143,7 @@ def findPhone(string): # Completa
         return phones[0]
 
 
-def findOwner(string): # A consertar
+def findOwner(string): # Completa
     periodos = string.split(".")
     periodo = periodos[-2]
 
@@ -172,7 +172,6 @@ def findOwner(string): # A consertar
             owner += periodo[index]
 
     return owner
-
 
 entrada = input()
 
