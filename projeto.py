@@ -31,10 +31,32 @@ def findAdress(string) : # Completa
         index += 1
 
     return endereco
-        
 
-def findCep(string): # Refazer
-    ...
+
+def findCep(string): # Completa
+    analisada = string
+    index = 0
+    k = 0
+    while k != -1:
+        k = analisada.find("-")
+
+        # Confere se é telefone ou cep
+        if analisada[k+4].isnumeric() or not analisada[k+1].isnumeric():
+            analisada = analisada[k+1::]
+        else:
+            index = k
+            break
+
+    if index == 0:
+        return "nao informado"
+
+    i = index - 5
+    cep = ""
+    while analisada[i].isnumeric() or analisada[i] == "-":
+        cep += analisada[i]
+        i += 1
+
+    return cep
 
 
 def findArea(string): # Completa
@@ -93,118 +115,98 @@ def findPrice(string): # Completa
         return preco[::-1]
 
 
-def findPhone(string): # A consertar
-    qtd = 0
-    for index, letra in enumerate(string):
-        if letra == "-":
-            if string[index+1].isnumeric():
-                qtd += 1
+def findPhone(string): # Completa
+    indexes = []
+    for i, l in enumerate(string):
+        if l == "-":
+            if string[i+4].isnumeric():
+                indexes.append(i)
 
-    k = findCep(string)
-    if k != "nao informado":
-        qtd -= 1
-
-    reverso = string[::-1]
     phones = []
-    for _ in range(0,qtd):
+    for index in indexes:
         phone = ""
-        index = 0
-        while not reverso[index].isnumeric():
-            index += 1
-        while reverso[index].isnumeric() or reverso[index] == "-":
-            phone += reverso[index]
-            index += 1
-        reverso = reverso[index:]
+        i = index + 4
+        while string[i].isnumeric() or string[i] == "-":
+            phone += string[i]
+            i -= 1
         phones.append(phone[::-1])
 
-    if len(phones) == 1:
-        return phones[0]
-    else:
-        phones = phones[::-1]
-        result = ""
-        for index, phone in enumerate(phones):
-            if index == len(phones) - 1:
-                result += f"{phone}"
+    if len(phones) > 1:
+        phone = ""
+        for i, k in enumerate(phones):
+            if i == len(phones) - 1:
+                phone += f"{k}"
             else:
-                result += f"{phone}, "
-        return result
+                phone += f"{k}, "
+        return phone
+    else:
+        return phones[0]
 
-def findOwner(string): # Completa
+
+def findOwner(string): # A consertar
     periodos = string.split(".")
-    uteis = [periodos[-1], periodos[-2]]
+    periodo = periodos[-2]
+
     index = 0
-    aux = 0
-    for periodo in uteis:
-        n = 0
-        for letra in periodo:
-            if letra.isupper():
-                n += 1
-        if n > aux:
-            aux = n
+    owner = ""
+    while index < len(periodo)-1:
+        index += 1
+        if periodo[index] == " " and not periodo[index+1].isupper():
+            c = 0
+            for l in owner:
+                if l.isupper():
+                    c += 1
+
+            if c < 2:
+                owner = ""
+            else:
+                break
+        elif periodo[index] == " " and periodo[index+1].isupper():
+            if owner[0].islower():
+                owner = ""
+            else:
+                owner += periodo[index]
+        elif periodo[index] == ",":
+            continue
         else:
-            index += 1
+            owner += periodo[index]
 
-    # Encontra onde começa o nome
-    util = uteis[index]
-    x = 0
-    nome = ""
-    if "Fal" in util:
-        x += 3
-        if "," in util:
-            while not util[x].isupper():
-                x += 1
-            while util[x] != ",":
-                nome += util[x]
-                x += 1
-        else:
-            while not util[x].isupper():
-                x += 1
-            while x < len(util):
-                nome += util[x]
-                x += 1
-    else:
-        while not util[x].isupper():
-                x += 1
-        while x < len(util):
-            nome += util[x]
-            x += 1
+    return owner
 
-    return nome
 
-if __name__ == "__main__":
-    entrada = input()
+entrada = input()
 
-    # Encontra a modalidade
-    modalidade = findModel(entrada)
-    print(f"Modalidade: {modalidade}")
+# Encontra a modalidade
+modalidade = findModel(entrada)
+print(f"Modalidade: {modalidade}")
 
-    # Encontra o tipo de imóvel
-    tipo = findType(entrada)
-    print(f"Tipo: {tipo}")
+# Encontra o tipo de imóvel
+tipo = findType(entrada)
+print(f"Tipo: {tipo}")
 
-    # Encontra o endereço do imóvel
-    endereco = findAdress(entrada)
-    print(f"Endereco: {endereco}")
+# Encontra o endereço do imóvel
+endereco = findAdress(entrada)
+print(f"Endereco: {endereco}")
 
-    # Encontra o Cep
-    cep = findCep(entrada)
-    print(f"CEP: {cep}")
+# Encontra o Cep
+cep = findCep(entrada)
+print(f"CEP: {cep}")
 
-    # Encontra a área
-    area = findArea(entrada)
-    print(f"Area: {area}")
+# Encontra a área
+area = findArea(entrada)
+print(f"Area: {area}")
 
-    # Encontra a área
-    valor = findPrice(entrada)
-    print(f"Valor: {valor}")
+# Encontra a área
+valor = findPrice(entrada)
+print(f"Valor: {valor}")
 
-    # Encontra o(s) telefone(s)
-    phone = findPhone(entrada)
-    if len(phone) > 10:
-        print(f"Telefones: {phone}")
-    else:
-        print(f"Telefone: {phone}")
+# Encontra o(s) telefone(s)
+phone = findPhone(entrada)
+if len(phone) > 10:
+    print(f"Telefones: {phone}")
+else:
+    print(f"Telefone: {phone}")
 
-    # Encontra o responsável
-    owner = findOwner(entrada)
-    print(f"Responsavel: {owner}")
+# Encontra o responsável
+owner = findOwner(entrada)
+print(f"Responsavel: {owner}")
