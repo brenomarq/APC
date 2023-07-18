@@ -5,6 +5,15 @@ e armazene em um formato json, permitindo sua consulta posterior.
 import json
 import os
 
+def adicionar(dados):
+    with open(caminho) as f:
+        data = json.load(f)
+    
+    data['alunos'].append(dados)
+    json_object = json.dumps(data, indent=len(data))
+    with open(caminho, "+w", encoding="utf-8") as arquivo:
+        arquivo.write(json_object)
+
 print("Bem-vindo, usuário!")
 caminho = "dados.json"
 while True:
@@ -16,15 +25,19 @@ while True:
     if escolha == "a":
         os.system("clear")
         nome = input("Digite o nome do aluno: ")
-        turma = input("Digite a turma: ")
-        notas = [float(input()) for _ in range(0,4)]
+        matricula = input("Digite sua matrícula: ")
+        notas = [float(input(f"Digite a {i+1}° nota: ")) for i in range(0,4)]
         media = sum(notas)/4
 
         dados = {
             "nome": nome,
-            "turma": turma,
+            "matricula": matricula,
             "media": media
         }
+
+        adicionar(dados)
+        os.system("clear")
+        print("Informações do aluno adicionadas com sucesso!")
 
     elif escolha == "c":
         ...
@@ -33,7 +46,9 @@ while True:
     elif escolha == "d":
         ...
     elif escolha == "s":
-        ...
+        os.system("clear")
+        print("Obrigado por usar nosso programa!")
+        break
     else:
         os.system("clear")
         print("Por favor, digite uma opção válida!\n")
